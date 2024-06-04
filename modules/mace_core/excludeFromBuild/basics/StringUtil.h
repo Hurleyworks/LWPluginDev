@@ -117,6 +117,7 @@ inline void matStr3f (const Eigen::Matrix3f& m, LEVELS level, const char functio
     LOG (level) << buffer.str();
 }
 
+#if 0 
 inline void bboxStrf (const Eigen::AlignedBox3f b, LEVELS level, const char function[] = "unknown function")
 {
     LOG (level) << "--- called from " << function;
@@ -128,5 +129,5 @@ inline void bboxStrf (const Eigen::AlignedBox3f b, LEVELS level, const char func
 
     LOG (level) << buffer.str();
 }
-
+#endif
 

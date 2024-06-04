@@ -2,7 +2,7 @@
 -- https://github.com/JohannesMP/Premake-for-Beginners
 
 
-workspace "LWPluginDev"
+workspace "LWPlugins"
 	architecture "x64"
 	location ("builds")
 
@@ -24,14 +24,22 @@ end
     
 	outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 	
-local ROOT = "../../"
+local ROOT = "../"
 
 -- the core
-project "LWPluginBase"
+project "LWFramework"
      kind "StaticLib"
     language "C++"
-	defines { "NANOVG_GL3", "_ENABLE_EXTENDED_ALIGNED_STORAGE",
-			"OIIO_STATIC_DEFINE", "CHANGE_G3LOG_DEBUG_TO_DBUG"}
+	defines {  "_ENABLE_EXTENDED_ALIGNED_STORAGE",
+			 "CHANGE_G3LOG_DEBUG_TO_DBUG",
+			 "CPPTRACE_STATIC_DEFINE", "NOMINMAX",
+			"CPPTRACE_GET_SYMBOLS_WITH_DBGHELP",
+			"CPPTRACE_UNWIND_WITH_DBGHELP",
+			"CPPTRACE_DEMANGLE_WITH_WINAPI",
+			--"LIBASSERT_USE_MAGIC_ENUM",
+			"LIBASSERT_LOWERCASE",
+			"LIBASSERT_SAFE_COMPARISONS",
+			"LIBASSERT_STATIC_DEFINE"}
 	flags { "MultiProcessorCompile", "NoMinimalRebuild" }
 	
 	if _ACTION == "vs2019" then
@@ -51,7 +59,8 @@ project "LWPluginBase"
 
 	local SOURCE_DIR = "core/source/"
 	local BERSERKO_DIR = "core/source/jahley/"
-	local MODULE_ROOT = "modules/"
+	local ROOT_JAHLEY_DIR = ROOT .. "core/source/jahley/"
+	local MODULE_ROOT = "../modules/"
 
     files
     { 
@@ -66,28 +75,26 @@ project "LWPluginBase"
 	  MODULE_ROOT .. "**.cu",
     }
 	
-	local THIRD_PARTY_DIR = "thirdparty/"
-	local VCPKG_DIR = "thirdparty/vcpkg/installed/x64-windows-static/"
+	local THIRD_PARTY_DIR = "../thirdparty/"
 	
 	includedirs
 	{
 		SOURCE_DIR,
 		BERSERKO_DIR,
 		MODULE_ROOT,
-		VCPKG_DIR,
-		
+		ROOT_JAHLEY_DIR,
+
 		THIRD_PARTY_DIR,
 		THIRD_PARTY_DIR .. "g3log/src",
+		THIRD_PARTY_DIR .. "lightwaveSDK/LW2023/sdk/include",
 		THIRD_PARTY_DIR .. "cpptrace/include/",
 		THIRD_PARTY_DIR .. "libassert/include/",
-		
-		VCPKG_DIR .. "include",
 	}
 	
 	filter {} -- clear filter!
 	
 	 -- must go after files and includedirs
-    filter { "files:modules/**/excludeFromBuild/**.cpp"}
+    filter { "files:../modules/**/excludeFromBuild/**.cpp"}
 		flags {"ExcludeFromBuild"}
 	
 	
@@ -103,18 +110,9 @@ project "LWPluginBase"
 		defines 
 		{ 
 			"_CRT_SECURE_NO_WARNINGS",
-			
 			--https://github.com/KjellKod/g3log/issues/337
 			"_SILENCE_CXX17_RESULT_OF_DEPRECATION_WARNING",
 			"_USE_MATH_DEFINES", "NOMINMAX",
-			 "CPPTRACE_STATIC_DEFINE", "NOMINMAX",
-			"CPPTRACE_GET_SYMBOLS_WITH_DBGHELP",
-			"CPPTRACE_UNWIND_WITH_DBGHELP",
-			"CPPTRACE_DEMANGLE_WITH_WINAPI",
-			--"LIBASSERT_USE_MAGIC_ENUM",
-			"LIBASSERT_LOWERCASE",
-			"LIBASSERT_SAFE_COMPARISONS",
-			"LIBASSERT_STATIC_DEFINE"
 		}
 		
 		 -- setting up visual studio filters (basically virtual folders).
@@ -137,7 +135,4 @@ project "LWPluginBase"
     
 	
 	-- add projects here
-	include "sandbox/HelloWorld"
-	
-	
-	
+	include "qdemos/layout/SimpleGeneric"

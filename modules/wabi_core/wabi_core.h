@@ -2,6 +2,10 @@
 
 #include "../mace_core/mace_core.h"
 
+#ifndef NOMINMAX
+#define NOMINMAX
+#endif
+
 using mace::ToString;
 
 using Eigen::Matrix;
@@ -37,11 +41,6 @@ using UV2f = Eigen::MatrixXf;
 using Normals3f = Eigen::MatrixXf;
 using Indices3i = Eigen::MatrixXi;
 
-const Eigen::Vector3f MAX_DIST_POINT_F = Eigen::Vector3f::Constant (std::numeric_limits<float>::max());
-const Eigen::Vector3d MAX_DIST_POINT_D = Eigen::Vector3d::Constant (std::numeric_limits<double>::max());
-const Eigen::Vector3f INVALID_NORMAL_F = Eigen::Vector3f::Constant (0.0);
-const Eigen::Vector3d INVALID_NORMAL_D = Eigen::Vector3d::Constant (0.0);
-const Eigen::Vector3i INVALID_TRI = Eigen::Vector3i::Constant (INVALID_INDEX);
 
 // Memory Allocation Functions
 #if defined(_WIN32)
