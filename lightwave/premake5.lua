@@ -136,3 +136,4 @@ project "LWFramework"
 	
 	-- add projects here
 	include "qdemos/layout/SimpleGeneric"
+
